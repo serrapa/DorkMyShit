@@ -1,0 +1,46 @@
+body{
+    min-width: 25rem;
+    background-color: rgb(33, 35, 37);
+    color: whitesmoke;
+}
+
+h2{
+    line-height: unset;
+}
+
+.btn-On{
+    background-color: #00bcd4;
+    border: 1px solid #00a5bb;
+    color: #fff;
+}
+.btn-Off{
+    color: whitesmoke;
+    background-color: red;
+}
+
+.choices__inner {
+    border: unset !important;
+    background-color: rgb(33, 35, 37) !important;
+}
+.choices__input {
+    background-color: transparent !important;
+}
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: #00bcd4 !important;
+}
+.choices__list--dropdown {
+    position: relative !important;
+    background-color: rgb(33, 35, 37) !important;
+    border: 1px solid rgb(20, 25, 27) !important;
+}
+.has-no-choices {
+    display: none !important;
+}
+
+.choices__item{
+    animation: bounceIn !important; /* referring directly to the animation's @keyframe declaration */
+}
+
+
+
+
