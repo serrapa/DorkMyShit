@@ -19,21 +19,41 @@
     <script src="./assets/js/choices.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/toggle.css">
   </head>
   <body>
     <div class="container">
       <div class="row m-2">
-        <div class="col-6">
+        <div class="col-10 " id="extensionTitle">
           <h2>Dork My Shit</h2>
-          
         </div>
         
-        <div class="col-5 text-end animate__animated animate__bounceIn" id="extensionEnabledContainer">
-          <input id="extensionEnabled" type="checkbox" data-toggle="toggle" data-onstyle="On" data-offstyle="Off">
+        <div class="col-2 text-end animate__animated animate__bounceIn power-switch" >
+            <input type="checkbox" id="extensionEnabled" />
+            <div class="button">
+              <svg class="power-off">
+                <use xlink:href="#line" class="line" />
+                <use xlink:href="#circle" class="circle" />
+              </svg>
+              <svg class="power-on">
+                <use xlink:href="#line" class="line" />
+                <use xlink:href="#circle" class="circle" />
+              </svg>
+            </div>
+          
+          <!-- SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" id="line">
+              <line x1="25" y1="11.33" x2="25" y2="19.33"/>
+            </symbol>
+            <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" id="circle">
+              <circle cx="25" cy="26.67" r="11.67"/>
+            </symbol>
+          </svg>
         </div>
       </div>
       <div class="row m-2" id="bookmarksContainer">
-        <p>Select which bookmark link to use for the Google Dork:</p>
+        <p>Select which bookmark to use:</p>
         <div class="row d-flex justify-content-center mt-100">
           <div class="col-md-6" >
             <select id="bookmarks" placeholder="Select bookmarks to use for dorking" multiple > </select>
