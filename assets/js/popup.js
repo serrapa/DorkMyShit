@@ -31,29 +31,14 @@ function initializeUI(allBookmarks,bookmarksSelected){
   
       return {
         item: ({ _classNames }, data) => {
-          let icon = '';
-          console.log(classNames, data)
-          if (data.label && data.label.includes('Web') && data.label.includes('Mobile')) {
-            icon = '<img src="../../images/web_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;"/><img src="../../images/mobile_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
-          } else if (data.label && ((data.label.includes('iOS') && data.label.includes('Android')) || data.label.includes('Mobile'))) {
-            icon = '<img src="../../images/mobile_16_icon.png" style="width: 1rem; height: 1rem; vertical-align: bottom;" class="option-icon">';
-          } else if (data.label && data.label.includes('Web')) {
-            icon = '<img src="../../images/web_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
-          }else if (data.label && data.label.includes('API')) {
-            icon = '<img src="../../images/api_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
-          } else if (data.label && data.label.includes('Android')) {
-            icon = '<img src="../../images/android_16_icon.png" style="width: 1rem; height: 1rem; vertical-align: top;" class="option-icon">';
-          } else if (data.label && data.label.includes('iOS')) {
-            icon = '<img src="../../images/ios_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
-          }
-  
           return template(`
             <div class="${classNames.item} ${
               data.highlighted ? classNames.highlightedState : classNames.itemSelectable
             }" data-item data-id="${data.id}" data-value="${data.value}" ${
             data.active ? 'aria-selected="true"' : ''
           } ${data.disabled ? 'aria-disabled="true"' : ''}>
-              ${icon} ${data.label.slice(data.label.indexOf("-")+1).trim()} <button type="button" class="${classNames.button}" data-button="" aria-label="Remove item: '${data.value}'">
+              ${getIcon(data.label)} ${data.label.slice(data.label.indexOf("-")+1).trim()} 
+              <button type="button" class="${classNames.button}" data-button="" aria-label="Remove item: '${data.value}'">
               Remove item
             </button>
             </div>
