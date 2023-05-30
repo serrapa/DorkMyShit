@@ -34,7 +34,7 @@ function initializeUI(allBookmarks,bookmarksSelected){
           let icon = '';
           console.log(classNames, data)
           if (data.label && data.label.includes('Web') && data.label.includes('Mobile')) {
-            icon = '<img src="../../images/web_mobile_48_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
+            icon = '<img src="../../images/web_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;"/><img src="../../images/mobile_16_icon.png" style="width:0.8rem; height:0.8rem; vertical-align: top;" class="option-icon">';
           } else if (data.label && ((data.label.includes('iOS') && data.label.includes('Android')) || data.label.includes('Mobile'))) {
             icon = '<img src="../../images/mobile_16_icon.png" style="width: 1rem; height: 1rem; vertical-align: bottom;" class="option-icon">';
           } else if (data.label && data.label.includes('Web')) {
