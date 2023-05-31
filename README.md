@@ -14,14 +14,17 @@ git clone https://github.com/serrapa/DorkMyShit.git
 ```
 
 Then:
-1. open [Extension page](chrome://extensions/)
+1. open [chrome://extensions/](chrome://extensions/)
 2. click on **load unpackaged extension**
 
 
 ## How does it work?
-First, you must have a directory named Blog on your bookmarks, because the extension will use it and everything inside to generate the Google dorks that will limit your searches.
+First, you must have a bookmarks directory named ***Blog***, since the extension will rely on it to obtain the website domain and construct the Google dorks based on it, confining your searches.
 
-<img width="468" alt="image" src="images/bookmarks.png"> <img width="506" alt="image" src="images/extension.png">
+<img width="468" height="300" alt="image" src="images/bookmarks.png"> <img width="468" height="300" alt="image" src="images/extension.png">
+
+The extension will create the following google dork while searching for `certificate pinning`:
+<img alt="image" src="images/example.png"> 
 
 Inside the blog directory, you can have as many subdirectories as you want, for example, you can divide people from companies, or among different topics.
 
