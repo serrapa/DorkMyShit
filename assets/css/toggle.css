@@ -55,8 +55,9 @@
 }
 .power-switch .button .power-on .line {
     opacity: 0;
-    transition: opacity 0.3s ease 1s;
+    transition: opacity 0.3s ease 0s;
 }
+
 .power-switch .button .power-on .circle {
     opacity: 1;
     stroke-dashoffset: 73.33;
@@ -126,10 +127,4 @@
         transform: scale(1);
    }
 }
-body {
-    font: 400 16px 'Poppins', sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+

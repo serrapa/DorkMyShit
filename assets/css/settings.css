@@ -1,0 +1,72 @@
+.settings-switch {
+    --color-invert: #fff; /* Colore invertito */
+    --width: 50px;
+    --height: 50px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: var(--width);
+    height: var(--height);
+}
+.settings-switch .button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.settings-switch .button:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: radial-gradient(circle closest-side, var(--color-invert), transparent);
+    filter: blur(7px);
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+    transform: perspective(1px) translateZ(0);
+    backface-visibility: hidden;
+}
+
+.settings-switch .button .settings-off {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    fill: none;
+    stroke: var(--color-invert); /* Colore invertito */
+    stroke-width: 2.67px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.settings-switch .button .settings-off .line {
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-invert); /* Colore invertito */
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+}
+.settings-switch input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0;
+}
+.settings-switch input:checked + .button:after {
+    opacity: 0.15;
+    backface-visibility: hidden;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.settings-switch input:checked + .button .settings-off .line {
+    opacity: 0.15;
+    transition: opacity 0.3s ease;
+}
+.settings-switch input:checked + .button .settings-on, .settings-switch input:checked + .button .settings-off {
+    animation: click-animation 0.3s ease forwards;
+    transform: scale(1);
+}

@@ -1,17 +1,16 @@
 {
-    "name": "Google Dork Search",
-    "version": "1.0",
+    "name": "DorkMyShit",
+    "version": "1.1.0",
     "manifest_version": 3,
-    "description": "Replaces Google searches with a custom Google dork.",
+    "description": "A Chrome extension that allows you to restrict your google searches to your favorite domains.",
     "permissions": ["activeTab", "tabs", "bookmarks","storage"],
     "action": {
-      "default_title": "DorkYourShit",
-      "default_popup": "popup.html",
-      "default_icon": {
-        "128": "images/icon_128_stopped.png"
-      }
+      "default_title": "DorkMyShit",
+      "default_popup": "popup.html"
     },
     "icons": {
+      "16": "images/icon_16_stopped.png",
+      "48": "images/icon_48_stopped.png",
       "128": "images/icon_128_stopped.png"
     },
     "background": {

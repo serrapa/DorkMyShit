@@ -9,14 +9,21 @@ async function _getBookmarksSelectedFromLocalStorage() {
     });
   });
 }
+async function _getBookmarksFolderSelected() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(['defaultFolder'], function(result) {
+      resolve(result.defaultFolder ?? null);
+    });
+  });
+}
 // Funzione ricorsiva per cercare la cartella Blog
-async function _findBlogFolder(bookmarkNodes) {
+async function _findBlogFolder(defaultFolder, bookmarkNodes) {
   for (let i = 0; i < bookmarkNodes.length; i++) {
     let bookmarkNode = bookmarkNodes[i];
-    if (bookmarkNode.title === 'Blog' && bookmarkNode.url === undefined) {
+    if (bookmarkNode.title === defaultFolder && bookmarkNode.url === undefined) {
       return bookmarkNode;
     } else if (bookmarkNode.children) {
-      let result = await _findBlogFolder(bookmarkNode.children);
+      let result = await _findBlogFolder(defaultFolder, bookmarkNode.children);
       if (result) {
         return result;
       }
@@ -32,9 +39,15 @@ function _getFlatBookmarksList(folder) {
   });
   return bookmarks;
 }
-async function _getAllBokkmarks(){
+async function _getAllBookmarks(){
+  defaultFolder = "Blog"
   // Recupera la cartella Blog
-  let blogFolder = await _findBlogFolder(await chrome.bookmarks.getTree());
+  let obj = await chrome.storage.local.get(["defaultFolder"]);
+  if(obj.defaultFolder && obj.defaultFolder[0].title){
+    defaultFolder = obj.defaultFolder[0].title
+  }
+  console.log("The default directory set is: ", defaultFolder)
+  let blogFolder = await _findBlogFolder(defaultFolder, await chrome.bookmarks.getTree());
   if (blogFolder) {
     // Recupera tutti i bookmarks all'interno della cartella Blog e delle sue sottocartelle
     let blogBookmarksTree = await chrome.bookmarks.getSubTree(blogFolder.id);
@@ -42,6 +55,30 @@ async function _getAllBokkmarks(){
     return blogBookmarks
   }
   return null
+}
+async function _getAllBookmarksFolders(){
+  return new Promise(function(resolve, reject) {
+    chrome.bookmarks.getTree(function(bookmarkTreeNodes) {
+      var bookmarkFolders = [];
+
+      function traverseBookmarks(nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+          var node = nodes[i];
+          if (node.children) {
+            bookmarkFolders.push({
+              id: node.id,
+              title: node.title
+            });
+            traverseBookmarks(node.children);
+          }
+        }
+      }
+
+      traverseBookmarks(bookmarkTreeNodes);
+
+      resolve(bookmarkFolders);
+    });
+  });
 }
 
 // Funzione per ottenere la Google Dork dai bookmarks selezionati
@@ -71,7 +108,7 @@ async function init(){
   await chrome.storage.local.set({extensionEnabled: false});
 
   // Inserisco tutti i bookmarks nel LocalStorage
-  await chrome.storage.local.set({bookmarksSelected: await _getAllBokkmarks()});
+  await chrome.storage.local.set({bookmarksSelected: await _getAllBookmarks()});
 
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -79,11 +116,18 @@ async function init(){
       let bookmarks = await _getBookmarksSelectedFromLocalStorage();
       // 2. A page requested bookmarks, respond with a copy of `bookmarks`
       if (request.getAllBookmarks) {
-        bookmarks = await _getAllBokkmarks()
+        bookmarks = await _getAllBookmarks()
         sendResponse( bookmarks);
+      }else if(request.getAllBookmarksFolders){
+        _getAllBookmarksFolders().then(function(bookmarkFolders) {
+          sendResponse( bookmarkFolders);
+        });
       }else if(request.getSelectedBookmarks){
         bookmarks = await _getBookmarksSelectedFromLocalStorage()
         sendResponse( bookmarks);
+      }else if(request.getSelectedBookmarksFolder){
+        folder = await _getBookmarksFolderSelected()
+        sendResponse( folder);
       }else if(request.addItem){
         let bookmarkToAdd = await chrome.bookmarks.get(request.bookmarkId)
         bookmarks.push(bookmarkToAdd[0])
@@ -95,6 +139,10 @@ async function init(){
         });
         // Memorizzo i bookmarks nel LocalStorage
         await chrome.storage.local.set({bookmarksSelected: bookmarks});
+      }else if(request.setFolder){
+        let bookmarkFolderId = await chrome.bookmarks.get(request.bookmarkId)
+        // Memorizzo la folder da usare by default
+        await chrome.storage.local.set({defaultFolder: bookmarkFolderId});
       }else{
         console.error("Not able to store the new bookmarks selection change")
       }
