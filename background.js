@@ -82,7 +82,7 @@ async function _getAllBookmarksFolders(){
 }
 
 // Funzione per ottenere la Google Dork dai bookmarks selezionati
-async function createGoogleDork() {
+async function createGoogleDorkWithSite() {
   let googleDork = '';
   // Recupera i bookmark selezionati dall'utente
   let blogBookmarks = await _getBookmarksSelectedFromLocalStorage();
@@ -92,8 +92,75 @@ async function createGoogleDork() {
       return dork + ' site:' + bookmark.url.replace("https://","").replace("http://","") + " | ";
     }, '');
   }
-  return googleDork;
+  return googleDork.slice(0,-2);
 }
+function createGoogleDorkWithTitle(ukt) {
+  let googleDork = '';
+  // Recupera le keyword inserite dall'utente
+  keywords = ukt.split(" ")
+  if(keywords){
+    // Creo le google dork dai bookmarks
+    googleDork = keywords.reduce((dork, keyword) => {
+      return dork + ' intitle:"' + keyword + '" | ';
+    }, '');
+  }
+  return googleDork.slice(0,-2);
+}
+function createGoogleDorkWithText(ukt) {
+  let googleDork = '';
+  // Recupera le keyword inserite dall'utente
+  keywords = ukt.split(" ")
+  if(keywords){
+    // Creo le google dork dai bookmarks
+    googleDork = keywords.reduce((dork, keyword) => {
+      return dork + ' intext:"' + keyword + '" & ';
+    }, '');
+  }
+  return googleDork.slice(0,-2);
+}
+function createGoogleDorkWithURL(ukt) {
+  let googleDork = '';
+  // Recupera le keyword inserite dall'utente
+  keywords = ukt.split(" ")
+  if(keywords){
+    // Creo le google dork dai bookmarks
+    googleDork = keywords.reduce((dork, keyword) => {
+      return dork + ' inurl:"' + keyword + '" | ';
+    }, '');
+  }
+  return googleDork.slice(0,-2);
+}
+
+async function buildGoogleDork(user_keyword_typed){
+  // Recupera la Google Dork
+  let googleDorkText = createGoogleDorkWithText(user_keyword_typed);
+  let googleDorkTitle = createGoogleDorkWithTitle(user_keyword_typed);
+  let googleDorkURL = createGoogleDorkWithURL(user_keyword_typed);
+  let googleDorkSite = await createGoogleDorkWithSite();
+  let google_dork = googleDorkText + googleDorkTitle + googleDorkURL + googleDorkSite
+  return google_dork
+}
+
+function cleanPreviousGoogleDork(user_keyword_typed){
+  const regex = /intitle:"([^"]+)"/g;
+  let match;
+  const matches = [];
+
+  if(!regex.exec(user_keyword_typed)){
+    return user_keyword_typed
+  }
+
+  while ((match = regex.exec(user_keyword_typed))) {
+    matches.push(match[1]);
+  }
+
+  // Crea una nuova stringa con le parole racchiuse nella dork, separate da uno spazio
+  const newString = matches.join(' ');
+
+  return newString;
+}
+
+
 // Funzione per verificare se l'estensione è attiva
 async function isExtensionEnabled() {
   return new Promise((resolve, reject) => {
@@ -160,17 +227,21 @@ chrome.tabs.onUpdated.addListener(
     // Verifica che la scheda non sia già stata aggiornata e che l'estensione sia attiva e che la URL della scheda sia una ricerca Google
     if (await isExtensionEnabled() && tabUrlUpdated != changeInfo.url && changeInfo.url && changeInfo.url.includes('https://www.google.com/search?')) {
 
-      // Recupera la Google Dork
-      let googleDork = await createGoogleDork();
-
       // Aggiungi la Google Dork alla query di ricerca
       let url = new URL(changeInfo.url);
       let searchParams = new URLSearchParams(url.search);
+      console.log("Query sporca:", searchParams.get('q'))
+
+      // Ripulisco dalla google dork precedentemente impostata, se esiste
+      cgd = cleanPreviousGoogleDork(searchParams.get('q'));
+      console.log("Query ripulita:",cgd)
       
-      // Ripulisco dalle google dork precedentemente impostate
-      const regex = /\ssite:.*\|/
-      cleanParamQ = searchParams.get('q').replace(regex, "");
-      searchParams.set('q', cleanParamQ + googleDork);
+      // Build the entire google dork
+      gd = await buildGoogleDork(cgd)
+      console.log("Nuova query:",gd)
+
+      // Imposto la google dork sul parametro di ricerca di google
+      searchParams.set('q', gd);
       url.search = searchParams.toString();
       
       // Imposta la variabile booleana a true per evitare il loop infinito
