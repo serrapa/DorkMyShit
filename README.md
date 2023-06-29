@@ -1,5 +1,5 @@
 # DorkMyShit
-*(latest update: v1.1.0)*
+*(latest update: v1.2.0)*
 
 A Chrome extension that allows you to restrict Google searches to your favorite bookmarks. The idea comes from the need to limit Google searches on specific topics to blogs of people/companies that have published articles of interest on the topic being searched for, thereby avoiding falling into useless links from companies that only sell fluff but pay a lot of money to have their pages appear first.
 
