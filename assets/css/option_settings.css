@@ -67,10 +67,8 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .settings-switch input:checked + .button .settings-on, .settings-switch input:checked + .button .settings-off {
-    animation: click-animation 0.3s ease forwards;
+    animation: lines-animation 0.8s ease forwards;
     transform: scale(1);
-}
-.settings-switch input:checked + .button .settings-on .line, .settings-switch input:checked + .button .settings-off .line {
 }
 
 .settings-switch input:checked + .button .settings-on .line {
@@ -78,32 +76,9 @@
     transition: opacity 0.3s ease-in 0s;
 }
 
-@keyframes line-animation {
-    0% {
-        transform: translateY(0);
-   }
-    10% {
-        transform: translateY(3.33px);
-   }
-    40% {
-        transform: translateY(-8.33px);
-   }
-    60% {
-        transform: translateY(-8px);
-   }
-    85% {
-        transform: translateY(3px);
-   }
-    100% {
-        transform: translateY(0px);
-   }
-}
-@keyframes click-animation {
+@keyframes lines-animation {
     0% {
         transform: scale(1);
-   }
-    50% {
-        transform: scale(0.9);
    }
     100% {
         transform: scale(1);

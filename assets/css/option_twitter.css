@@ -1,0 +1,92 @@
+
+.socials-switch {
+    --color-invert: #fff;
+    --width: 50px;
+    --height: 50px;
+
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: var(--width);
+    height: var(--height);
+  }
+
+.socials-switch .button {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.socials-switch .button:after {
+    /* 
+        Questa parte definisce il valore :after all'interno del div.
+        I valori NON vanno cambiati, non c'è proprio il bisogno.
+    */
+    content: "";
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: absolute;
+    background: radial-gradient(circle closest-side, var(--color-invert), transparent);
+    filter: blur(7px);
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+    transform: perspective(1px) translateZ(0);
+    backface-visibility: hidden;
+}
+.socials-switch .button .socials-on, .socials-switch .button .socials-off {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    fill: none;
+    stroke: var(--color-invert);
+    stroke-width: 2.67px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.socials-switch .button .socials-on .twitter, .socials-switch .button .socials-off .twitter {
+    opacity: 0.2;
+}
+
+.socials-switch .button .socials-on {
+    filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, .8));
+}
+.socials-switch .button .socials-on .twitter {
+    opacity: 0;
+    transition: opacity 0.3s ease 0s;
+}
+
+
+.socials-switch input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0;
+}
+
+
+
+.socials-switch input:checked + .button .twitter, .socials-switch input:checked + .button .twitter {
+    animation: color-animation 0.8s ease forwards;
+    transform: scale(1);
+}
+
+.socials-switch input:checked + .button .socials-on .twitter, .socials-switch input:checked + .button .socials-off .twitter {
+    animation: color-animation 0.8s ease-in forwards;
+}
+.socials-switch input:checked + .button .socials-on .twitter {
+    opacity: 1;
+    transition: opacity 0.5s ease-in 0s;
+}
+
+@keyframes color-animation {
+    from {background-color: red;}
+    to {background-color: yellow;}
+}
+

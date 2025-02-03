@@ -18,6 +18,10 @@
     position: relative;
 }
 .power-switch .button:after {
+    /* 
+        Questa parte definisce il valore :after all'interno del div.
+        I valori NON vanno cambiati, non c'è proprio il bisogno.
+    */
     content: "";
     width: 100%;
     height: 100%;
@@ -89,7 +93,9 @@
 }
 .power-switch input:checked + .button .power-on .line {
     opacity: 1;
-    transition: opacity 0.05s ease-in 0.55s;
+    /* essendo prima */
+    transition: opacity 0.05s ease-in 0.55s; 
+    /* 0.05s a partire, 0.55s dopo quanto tempo parte l'animazione */
 }
 .power-switch input:checked + .button .power-on .circle {
     transform: rotate(302deg);
